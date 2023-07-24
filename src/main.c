@@ -1,5 +1,6 @@
+#include <stdlib.h>
+
 #include <math.h>
-#include <malloc.h>
 #include <time.h>
 
 #include "wav/make_wav.h"
