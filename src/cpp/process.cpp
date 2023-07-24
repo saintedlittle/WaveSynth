@@ -1,5 +1,7 @@
 #include "process.h"
 
+#include "../constants.h"
+
 using namespace std;
 
 Process::Process(string file) {

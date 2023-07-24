@@ -1,12 +1,10 @@
+#include <corecrt_math.h>
 #include <stdlib.h>
-
-#include <math.h>
 #include <time.h>
 
 #include "wav/make_wav.h"
 
-#define S_RATE  (44100)
-#define BUF_SIZE (S_RATE*10) /* 2 second buffer */
+#include "constants.h"
 
 short int buffer[BUF_SIZE];
 
@@ -30,8 +28,7 @@ void create_bivariate_gaussian(float amplitude, float mean_x, float mean_y, floa
 void create_logarithmic_function(float amplitude, float base);
 void create_bessel_function(float amplitude, int n);
 
-int main(int argc, char * argv[])
-{
+int main() {
 
     float amplitude = 20000; // 32767/(10%amp+5%amp+100%amp)
 
@@ -168,7 +165,7 @@ void create_logarithmic_function(float amplitude, float base) {
 void create_bessel_function(float amplitude, int n) {
     for (int i = 0; i < BUF_SIZE; i++) {
         float x = 20.0 * (float)i / BUF_SIZE; // Adjust the scaling factor as needed
-        buffer[i] = (int)(amplitude * jn(n, x));
+        buffer[i] = (int)(amplitude * _jn(n, x));
     }
 
     write_wav("bessel_function.wav", BUF_SIZE, buffer, S_RATE);
