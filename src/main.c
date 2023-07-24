@@ -4,6 +4,7 @@
 #include "wav/make_wav.h"
 
 #include "constants.h"
+#include "stb/stb_image.h"
 
 short int buffer[BUF_SIZE];
 
@@ -73,7 +74,9 @@ int main() {
 
     create_logarithmic_function(amplitude, base_log);
 
-    return 0;
+    write_bmp("image.bmp", "image.wav");
+
+    return EXIT_SUCCESS;
 }
 
 void create_sinusoid(float amplitude, float freq_Hz) {
@@ -85,7 +88,7 @@ void create_sinusoid(float amplitude, float freq_Hz) {
 
     }
 
-    write_wav("sinusoid.wav", BUF_SIZE, buffer, S_RATE);
+    write_16bit_wav("sinusoid.wav", BUF_SIZE, buffer, S_RATE);
 }
 
 void create_noise(float amplitude) {
@@ -94,7 +97,7 @@ void create_noise(float amplitude) {
         buffer[i] +=(int)amplitude*d_random(-1.0, 1.0); //nois
     }
 
-    write_wav("noise.wav", BUF_SIZE, buffer, S_RATE);
+    write_16bit_wav("noise.wav", BUF_SIZE, buffer, S_RATE);
 }
 
 void create_complex_sinusoid(float amplitude, float freq_Hz) {
@@ -105,7 +108,7 @@ void create_complex_sinusoid(float amplitude, float freq_Hz) {
         buffer[i] += (int)(amplitude / 5 * sin((float)(2 * M_PI * i * 1000 * freq_Hz / S_RATE)));  // 20% amp
     }
 
-    write_wav("complex_sinusoid.wav", BUF_SIZE, buffer, S_RATE);
+    write_16bit_wav("complex_sinusoid.wav", BUF_SIZE, buffer, S_RATE);
 }
 
 void create_square_wave(float amplitude, float freq_Hz) {
@@ -113,7 +116,7 @@ void create_square_wave(float amplitude, float freq_Hz) {
         buffer[i] = (int)(amplitude * signbit(sin((float)(2 * M_PI * i * freq_Hz / S_RATE))));
     }
 
-    write_wav("square_wave.wav", BUF_SIZE, buffer, S_RATE);
+    write_16bit_wav("square_wave.wav", BUF_SIZE, buffer, S_RATE);
 }
 
 void create_sawtooth_wave(float amplitude) {
@@ -121,7 +124,7 @@ void create_sawtooth_wave(float amplitude) {
         buffer[i] = (int)(amplitude * ((float)i / BUF_SIZE - 0.5));
     }
 
-    write_wav("sawtooth_wave.wav", BUF_SIZE, buffer, S_RATE);
+    write_16bit_wav("sawtooth_wave.wav", BUF_SIZE, buffer, S_RATE);
 }
 
 void create_decay_envelope(float amplitude, float decay_factor) {
@@ -130,7 +133,7 @@ void create_decay_envelope(float amplitude, float decay_factor) {
         buffer[i] = (int)(amplitude * exp(-decay_factor * t));
     }
 
-    write_wav("decay_envelope.wav", BUF_SIZE, buffer, S_RATE);
+    write_16bit_wav("decay_envelope.wav", BUF_SIZE, buffer, S_RATE);
 }
 
 void create_triangle_wave(float amplitude) {
@@ -139,7 +142,7 @@ void create_triangle_wave(float amplitude) {
         buffer[i] = (int)(amplitude * (2 * fabs(2 * t - 1) - 1));
     }
 
-    write_wav("triangle_wave.wav", BUF_SIZE, buffer, S_RATE);
+    write_16bit_wav("triangle_wave.wav", BUF_SIZE, buffer, S_RATE);
 }
 
 void create_bivariate_gaussian(float amplitude, float mean_x, float mean_y, float sigma_x, float sigma_y) {
@@ -149,7 +152,7 @@ void create_bivariate_gaussian(float amplitude, float mean_x, float mean_y, floa
                                                   + (x - mean_y) * (x - mean_y) / (sigma_y * sigma_y))));
     }
 
-    write_wav("bivariate_gaussian.wav", BUF_SIZE, buffer, S_RATE);
+    write_16bit_wav("bivariate_gaussian.wav", BUF_SIZE, buffer, S_RATE);
 }
 
 void create_logarithmic_function(float amplitude, float base) {
@@ -158,7 +161,7 @@ void create_logarithmic_function(float amplitude, float base) {
         buffer[i] = (int)(amplitude * log(x) / log(base));
     }
 
-    write_wav("logarithmic_function.wav", BUF_SIZE, buffer, S_RATE);
+    write_16bit_wav("logarithmic_function.wav", BUF_SIZE, buffer, S_RATE);
 }
 
 void create_bessel_function(float amplitude, int n) {
@@ -172,7 +175,7 @@ void create_bessel_function(float amplitude, int n) {
         #endif
     }
 
-    write_wav("bessel_function.wav", BUF_SIZE, buffer, S_RATE);
+    write_16bit_wav("bessel_function.wav", BUF_SIZE, buffer, S_RATE);
 }
 
 void create_musical_chord(float amplitude) {
@@ -187,7 +190,7 @@ void create_musical_chord(float amplitude) {
         }
     }
 
-    write_wav("musical_chord.wav", BUF_SIZE, buffer, S_RATE);
+    write_16bit_wav("musical_chord.wav", BUF_SIZE, buffer, S_RATE);
 }
 
 void create_complex_waveform(float amplitude) {
@@ -201,7 +204,7 @@ void create_complex_waveform(float amplitude) {
         buffer[i] = (short)(amplitude * sin(carrier_phase) * modulator_value);
     }
 
-    write_wav("complex_waveform.wav", BUF_SIZE, buffer, S_RATE);
+    write_16bit_wav("complex_waveform.wav", BUF_SIZE, buffer, S_RATE);
 }
 
 void create_complex_envelope(float amplitude) {
@@ -210,7 +213,7 @@ void create_complex_envelope(float amplitude) {
         buffer[i] = (short)(amplitude * envelope);
     }
 
-    write_wav("complex_envelope.wav", BUF_SIZE, buffer, S_RATE);
+    write_16bit_wav("complex_envelope.wav", BUF_SIZE, buffer, S_RATE);
 }
 
 void create_random_amplitude_modulation(float amplitude) {
@@ -221,7 +224,7 @@ void create_random_amplitude_modulation(float amplitude) {
         buffer[i] = (short)(amplitude * envelope);
     }
 
-    write_wav("random_amplitude_modulation.wav", BUF_SIZE, buffer, S_RATE);
+    write_16bit_wav("random_amplitude_modulation.wav", BUF_SIZE, buffer, S_RATE);
 }
 void create_2d_chirp(float amplitude) {
     float start_freq = 100.0; // Starting frequency of the chirp
@@ -234,5 +237,5 @@ void create_2d_chirp(float amplitude) {
         buffer[i] = (short)(amplitude * sin(phase));
     }
 
-    write_wav("2d_chirp.wav", BUF_SIZE, buffer, S_RATE);
+    write_16bit_wav("2d_chirp.wav", BUF_SIZE, buffer, S_RATE);
 }
