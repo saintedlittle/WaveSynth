@@ -164,7 +164,12 @@ void create_logarithmic_function(float amplitude, float base) {
 void create_bessel_function(float amplitude, int n) {
     for (int i = 0; i < BUF_SIZE; i++) {
         float x = 20.0 * (float)i / BUF_SIZE; // Adjust the scaling factor as needed
-        buffer[i] = (int)(amplitude * _jn(n, x));
+
+        #ifdef WIN32
+            buffer[i] = (int)(amplitude * _jn(n, x));
+        #else
+            buffer[i] = (int)(amplitude * jn(n, x));
+        #endif
     }
 
     write_wav("bessel_function.wav", BUF_SIZE, buffer, S_RATE);
