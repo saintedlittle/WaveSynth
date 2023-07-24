@@ -1,9 +1,3 @@
-#ifdef WIN32
-#include <corecrt_math.h>
-#elif
-#include <math.h>
-#endif
-
 #include <stdlib.h>
 #include <time.h>
 
