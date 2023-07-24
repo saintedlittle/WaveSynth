@@ -10,9 +10,9 @@
 #ifdef WIN32
 #include <corecrt_math.h>
 #define M_PI acos(-1.0)
-#endif
-
+#else
 #include <math.h>
+#endif
 
 #define S_RATE  (44100)
 #define BUF_SIZE (S_RATE*10) /* 2 second buffer */

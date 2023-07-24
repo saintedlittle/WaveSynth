@@ -1,10 +1,10 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "wav/make_wav.h"
-
 #include "constants.h"
+
 #include "stb/stb_image.h"
+#include "wav/make_wav.h"
 
 short int buffer[BUF_SIZE];
 

@@ -10,4 +10,6 @@ add_executable(wavGenerator
 
 if(MSVC)
     target_compile_options(wavGenerator PRIVATE /wd4244)
+else()
+    target_link_libraries(wavGenerator PRIVATE m)
 endif()
