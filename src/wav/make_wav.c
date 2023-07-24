@@ -74,7 +74,8 @@ void write_16bit_wav(char * filename, unsigned long num_samples, short int * dat
 
 void write_24bit_wav(const char* filename, unsigned long num_samples, uint8_t* data, int s_rate) {
     FILE* wav_file = fopen(filename, "wb");
-    assert(wav_file);
+    assert(wav_file);   /* make sure it opened */
+
 
     // WAV file header information
     const int PCM_FORMAT = 1; // PCM format code
@@ -87,68 +88,30 @@ void write_24bit_wav(const char* filename, unsigned long num_samples, uint8_t* d
     // WAV file header
     fwrite("RIFF", 1, 4, wav_file); // RIFF header
     unsigned long chunk_size = 36 + num_samples * NUM_CHANNELS * (BITS_PER_SAMPLE / 8);
-    fwrite(&chunk_size, sizeof(chunk_size), 1, wav_file); // File size
+    write_little_endian(chunk_size, 4, wav_file); // File size
     fwrite("WAVE", 1, 4, wav_file); // WAVE header
     fwrite("fmt ", 1, 4, wav_file); // Format chunk header
     unsigned long subchunk_size = 16;
-    fwrite(&subchunk_size, sizeof(subchunk_size), 1, wav_file); // Subchunk size
+    write_little_endian(subchunk_size, 4, wav_file); // Subchunk size
     unsigned short audio_format = PCM_FORMAT;
-    fwrite(&audio_format, sizeof(audio_format), 1, wav_file); // Audio format
-    fwrite(&NUM_CHANNELS, sizeof(NUM_CHANNELS), 1, wav_file); // Number of channels
-    fwrite(&s_rate, sizeof(s_rate), 1, wav_file); // Sample rate
-    fwrite(&byte_rate, sizeof(byte_rate), 1, wav_file); // Byte rate
-    fwrite(&block_align, sizeof(block_align), 1, wav_file); // Block align
-    fwrite(&BITS_PER_SAMPLE, sizeof(BITS_PER_SAMPLE), 1, wav_file); // Bits per sample
+    write_little_endian(audio_format, 2, wav_file); // Audio format
+    write_little_endian(NUM_CHANNELS, 2, wav_file); // Number of channels
+    write_little_endian(s_rate, 4, wav_file); // Sample rate
+    write_little_endian(byte_rate, 4, wav_file); // Byte rate
+    write_little_endian(block_align, 2, wav_file); // Block align
+    write_little_endian(BITS_PER_SAMPLE, 2, wav_file); // Bits per sample
 
     // Data chunk
     fwrite("data", 1, 4, wav_file);
     unsigned long data_size = num_samples * NUM_CHANNELS * (BITS_PER_SAMPLE / 8);
-    fwrite(&data_size, sizeof(data_size), 1, wav_file);
-    fwrite(data, sizeof(uint8_t), num_samples, wav_file);
+    write_little_endian(data_size, 4, wav_file);
+
+    // Convert 24-bit audio data to little-endian format
+    for (unsigned long i = 0; i < num_samples; i++) {
+        write_little_endian(data[i * NUM_CHANNELS * 3 + 2], 1, wav_file); // 1st byte (LSB)
+        write_little_endian(data[i * NUM_CHANNELS * 3 + 1], 1, wav_file); // 2nd byte
+        write_little_endian(data[i * NUM_CHANNELS * 3], 1, wav_file);     // 3rd byte (MSB)
+    }
 
     fclose(wav_file);
-}
-
-unsigned long read_bmp_image(const char* bmp_filename, uint8_t** audio_data) {
-    int width, height, channels;
-    uint8_t* bmp_data = stbi_load(bmp_filename, &width, &height, &channels, STBI_rgb);
-
-    if (!bmp_data) {
-        printf("Error loading BMP image: %s\n", stbi_failure_reason());
-        return 0;
-    }
-
-    unsigned long num_samples = width * height;
-    *audio_data = (uint8_t*)malloc(num_samples * sizeof(uint8_t));
-
-    for (unsigned long i = 0; i < num_samples; i++) {
-        // Convert BMP RGB data to mono audio (simple average of RGB values)
-        uint8_t r = bmp_data[i * channels];
-        uint8_t g = bmp_data[i * channels + 1];
-        uint8_t b = bmp_data[i * channels + 2];
-        (*audio_data)[i] = (r + g + b) / 3;
-    }
-
-    stbi_image_free(bmp_data);
-
-    return num_samples;
-}
-
-int write_bmp(char* bmp_filename, char* output_filename) {
-    uint8_t* audio_data = NULL;
-    unsigned long num_samples = read_bmp_image(bmp_filename, &audio_data);
-
-    if (num_samples == 0) {
-        return 1;
-    }
-
-    write_24bit_wav(output_filename, num_samples, audio_data, S_RATE);
-
-    free(audio_data);
-
-    return 0;
-}
-
-double d_random(double min, double max) {
-    return min + (max - min) / RAND_MAX * rand();
 }
