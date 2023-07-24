@@ -2,7 +2,6 @@
  * Creates a WAV file from an array of ints.
  */
 
-#include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
 

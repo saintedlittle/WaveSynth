@@ -1,53 +1,79 @@
-#include <stdlib.h>
 #include <time.h>
+#include "noise/noises.h"
+#include "waves/waves.h"
+#include "utils/utils.h"
 
-#include "math/functions.h"
+void initialize_srand();
+
+void create_perlins();
+void create_waves();
+void create_math();
+void create_noise();
 
 int main() {
-
-    float amplitude = 20000; // 32767/(10%amp+5%amp+100%amp)
-
-    float freq_Hz = 100;
-    float decay_factor = 1 / freq_Hz;
-
-    // FOR BIVARIATE GAUSSIAN
-    float mean_x = 0.0;       // Mean along the x-axis
-    float mean_y = 5.0;       // Mean along the y-axis
-    float sigma_x = 1.5;      // Standard deviation along the x-axis
-    float sigma_y = 2.0;      // Standard deviation along the y-axis
-    // END.
-
-    float base_log = (float) d_random(1.1, 10.0); // Base of the logarithm
-    int order_bessel = (int)d_random(1.0, 10.0); // Order of the Bessel function
-
-
     initialize_srand();
-    
-    create_sinusoid(amplitude, freq_Hz);
 
-    create_complex_sinusoid(amplitude, freq_Hz);
+    setup_information();
+    setup_bessel_and_log((int)d_random(1.0, 10.0), (float) d_random(1.1, 10.0));
 
-    create_square_wave(amplitude, freq_Hz);
-    create_decay_envelope(amplitude, decay_factor);
+    create_waves();
+    create_math();
+    create_noise();
 
-    create_noise(amplitude);
+    setup_noise_information();
 
-    create_sawtooth_wave(amplitude);
-    create_triangle_wave(amplitude);
-    create_musical_chord(amplitude);
-    create_complex_waveform(amplitude);
-
-    create_2d_chirp(amplitude);
-    create_complex_envelope(amplitude);
-    create_random_amplitude_modulation(amplitude);
-
-    create_bivariate_gaussian(amplitude, mean_x, mean_y, sigma_x, sigma_y);
-
-    create_bessel_function(amplitude, order_bessel);
-
-    create_logarithmic_function(amplitude, base_log);
+    create_perlins();
+    create_fbm_3d(noise_information.fbm_amp, noise_information.fbm_freq, noise_information.fbm_layers, noise_information.fbm_lacunarity);
 
     write_bmp("image.bmp", "image.wav");
 
     return EXIT_SUCCESS;
+}
+
+void initialize_srand() {
+    srand((unsigned int)time(0));
+}
+
+
+void create_perlins() {
+    create_perlin_noise_1d(noise_information.perlin_amp_1d, noise_information.perlin_freq_1d);
+    create_perlin_noise_2d(noise_information.perlin_amp_2d, noise_information.perlin_freq_2d, NULL);
+    create_perlin_noise_3d(noise_information.perlin_amp_3d, noise_information.perlin_freq_3d, NULL);
+}
+
+void create_waves() {
+    create_square_wave(information.amplitude, information.freq_Hz);
+    create_sawtooth_wave(information.amplitude);
+    create_triangle_wave(information.amplitude);
+
+}
+
+void create_math() {
+    create_sinusoid(information.amplitude, information.freq_Hz);
+
+    create_complex_sinusoid(information.amplitude, information.freq_Hz);
+
+    create_decay_envelope(information.amplitude, information.decay_factor);
+
+    create_musical_chord(information.amplitude);
+
+    create_2d_chirp(information.amplitude);
+    create_complex_envelope(information.amplitude);
+    create_random_amplitude_modulation(information.amplitude);
+
+    create_bivariate_gaussian(information.amplitude, information.mean_x, information.mean_y, information.sigma_x, information.sigma_y);
+
+    create_bessel_function(information.amplitude, information.order_bessel);
+
+    create_logarithmic_function(information.amplitude, information.base_log);
+
+}
+
+void create_noise() {
+    create_default_noise(information.amplitude);
+
+    create_simplex_noise(information.amplitude, information.freq_Hz);
+    create_gradient_noise(information.amplitude, information.freq_Hz);
+
+    create_pink_noise(information.amplitude, information.freq_Hz);
 }
