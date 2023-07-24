@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-project(wavGenerator C)
+project(wavGenerator C CXX)
 
 set(CMAKE_C_STANDARD 23)
 
