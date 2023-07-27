@@ -5,9 +5,20 @@
 #ifndef WAVGENERATOR_FUNCTIONS_H
 #define WAVGENERATOR_FUNCTIONS_H
 
+#include <stdlib.h>
+#include <omp.h>
+
 #include "../constants.h"
 
 #include "../stb/stb_image.h"
+
+#define STEPS 1000000000
+#define MELODY_DURATION 10
+
+double calculate_golden_ratio();
+
+// Function to generate a melody using the golden ratio as rhythm
+void generate_melody(char *filename, double duration_seconds);
 
 void create_sinusoid(float amplitude, float freq_Hz);
 
@@ -23,5 +34,7 @@ void create_bivariate_gaussian(float amplitude, float mean_x, float mean_y, floa
 
 void create_logarithmic_function(float amplitude, float base);
 void create_bessel_function(float amplitude, int n);
+
+void print_calculated_golden_ratio();
 
 #endif //WAVGENERATOR_FUNCTIONS_H

@@ -2,7 +2,6 @@
 // Created by saintedlittle on 24.07.2023.
 //
 
-#include <stdlib.h>
 #include "functions.h"
 
 #include "../wav/make_wav.h"
@@ -117,3 +116,69 @@ void create_2d_chirp(float amplitude) {
 
     write_16bit_wav("2d_chirp.wav", BUF_SIZE, buffer, S_RATE);
 }
+
+double calculate_golden_ratio() {
+    double phi = 1.0;
+    double previous_term = 1.0;
+
+    #pragma omp parallel for
+    for (int i = 0; i < STEPS; i++) {
+        phi = 1.0 + 1.0 / previous_term;
+        previous_term = phi;
+
+        printf("STEP %i) %.500000f \n", i-1, previous_term);
+    }
+
+    return phi;
+}
+
+void generate_melody(char *filename, double duration_seconds) {
+    // Constants for the golden ratio and musical note frequencies
+    const double golden_ratio = 1.61803398875;
+    const double base_frequency = 440.0; // A4 note frequency (440 Hz)
+    const double semitone_ratio = pow(2, 1.0 / 12.0);
+
+    // Sampling rate and duration
+    int sampling_rate = 44100; // Adjust as per your requirements
+    unsigned long num_samples = (unsigned long)(duration_seconds * sampling_rate);
+
+    // Allocate memory for audio data
+    short int *audio_data = (short int *)malloc(num_samples * sizeof(short int));
+
+    // Calculate the time interval between consecutive notes using the golden ratio
+    double time_interval = 1.0 / (base_frequency * pow(semitone_ratio, 12));
+
+    // Generate the melody
+    double time = 0.0;
+    int note_index = 0;
+
+    while (time < duration_seconds) {
+        // Calculate the frequency of the current note
+        double frequency = base_frequency * pow(semitone_ratio, note_index);
+
+        // Calculate the number of samples for the note duration
+        unsigned long note_duration_samples = (unsigned long)(time_interval * sampling_rate);
+
+        // Generate the waveform for the current note (sine wave, for simplicity)
+        for (unsigned long i = 0; i < note_duration_samples; i++) {
+            double t = 2.0 * M_PI * frequency * ((double)i / (double)sampling_rate);
+            audio_data[i] = (short int)(32767.0 * sin(t)); // Convert to 16-bit signed PCM
+        }
+
+        // Update time and move to the next note index (based on golden ratio)
+        time += time_interval;
+        note_index = (note_index + 1) % 12; // Assuming 12 notes in an octave
+        time_interval *= golden_ratio;
+    }
+
+    // Write the generated audio data to a WAV file
+    write_16bit_wav(filename, num_samples, audio_data, sampling_rate);
+
+    // Free allocated memory
+    free(audio_data);
+}
+
+void print_calculated_golden_ratio() {
+    printf("Approximate value of the golden ratio: %.50f\n", calculate_golden_ratio());
+}
+
