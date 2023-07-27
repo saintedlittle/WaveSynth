@@ -33,7 +33,7 @@ int main() {
 
     print_calculated_golden_ratio();
 
-    generate_melody("golder_ratio_melody.wav", RATIO_DURATION);
+    generate_melody("golder_ratio_melody.wav");
 
     generate_purer_melody(10);
 

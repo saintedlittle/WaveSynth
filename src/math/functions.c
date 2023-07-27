@@ -132,7 +132,9 @@ double calculate_golden_ratio() {
     return phi;
 }
 
-void generate_melody(char *filename, double duration_seconds) {
+void generate_melody(char *filename) {
+    int duration_seconds = RATIO_DURATION;
+
     // Constants for the golden ratio and musical note frequencies
     const double golden_ratio = 1.61803398875;
     const double base_frequency = 440.0; // A4 note frequency (440 Hz)
