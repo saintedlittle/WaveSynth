@@ -19,7 +19,7 @@
 #define S_RATE  (44100)
 #define BUF_SIZE (S_RATE*10) /* 2 second buffer */
 
-short int buffer[BUF_SIZE];
+static short int buffer[BUF_SIZE];
 
 typedef struct basic_information {
     float amplitude;
