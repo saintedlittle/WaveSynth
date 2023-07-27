@@ -13,11 +13,11 @@
 #include "../stb/stb_image.h"
 
 #define STEPS 1000000000
-#define MELODY_DURATION 10
+#define RATIO_DURATION 10
 
 double calculate_golden_ratio();
 
-// Function to generate a melody using the golden ratio as rhythm
+// Function to generate_purer_melody a melody using the golden ratio as rhythm
 void generate_melody(char *filename, double duration_seconds);
 
 void create_sinusoid(float amplitude, float freq_Hz);

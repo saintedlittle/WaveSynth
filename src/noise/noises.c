@@ -43,7 +43,7 @@ void create_perlin_noise_2d(float amplitude, float frequency, int* buffer) {
 
 }
 
-// Function to generate 3D Perlin Noise
+// Function to generate_purer_melody 3D Perlin Noise
 void create_perlin_noise_3d(float amplitude, float frequency, int* buffer) {
     int mark = 0;
 
@@ -84,7 +84,7 @@ void create_gradient_noise(float amplitude, float frequency) {
     write_16bit_wav("gradient_noise.wav", BUF_SIZE, buffer, S_RATE);
 }
 
-// Function to generate 3D Fractal Brownian Motion (FBM)
+// Function to generate_purer_melody 3D Fractal Brownian Motion (FBM)
 void create_fbm_3d(float amplitude, float frequency, int layers, float lacunarity) {
     for (int i = 0; i < BUF_SIZE; i++) {
         float x = (float)i / S_RATE;

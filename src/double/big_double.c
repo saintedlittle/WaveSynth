@@ -1,7 +1,6 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <omp.h>
+#include "big_double.h"
 
 void my_double_init(MyDouble *number, double value) {
     // Convert the 'value' to the internal representation (two's complement)

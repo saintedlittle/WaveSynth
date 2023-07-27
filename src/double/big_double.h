@@ -5,8 +5,6 @@
 #ifndef WAVGENERATOR_BIG_DOUBLE_H
 #define WAVGENERATOR_BIG_DOUBLE_H
 
-#define BUFFER_SIZE 10000000
-
 typedef struct {
     unsigned char data[128]; // 1024 bits / 8 bits per char = 128 bytes
 } MyDouble;

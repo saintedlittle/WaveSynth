@@ -114,3 +114,51 @@ void write_24bit_wav(const char* filename, unsigned long num_samples, uint8_t* d
 
     fclose(wav_file);
 }
+
+void write_32bit_float_wav(char *filename, unsigned long num_samples, float *data, int s_rate) {
+    FILE *wav_file = fopen(filename, "wb");
+
+    if (!wav_file) {
+        printf("Error opening file for writing.\n");
+        return;
+    }
+
+    // Prepare WAV header
+    WavHeader header;
+    header.chunk_id[0] = 'R';
+    header.chunk_id[1] = 'I';
+    header.chunk_id[2] = 'F';
+    header.chunk_id[3] = 'F';
+    header.chunk_size = num_samples * sizeof(float) + sizeof(WavHeader) - 8;
+    header.format[0] = 'W';
+    header.format[1] = 'A';
+    header.format[2] = 'V';
+    header.format[3] = 'E';
+    header.subchunk1_id[0] = 'f';
+    header.subchunk1_id[1] = 'm';
+    header.subchunk1_id[2] = 't';
+    header.subchunk1_id[3] = ' ';
+    header.subchunk1_size = 16;
+    header.audio_format = 3; // 3 represents floating-point format
+    header.num_channels = 1; // Mono audio
+    header.sample_rate = s_rate;
+    header.byte_rate = s_rate * sizeof(float);
+    header.block_align = sizeof(float);
+    header.bits_per_sample = sizeof(float) * 8;
+    header.subchunk2_id[0] = 'd';
+    header.subchunk2_id[1] = 'a';
+    header.subchunk2_id[2] = 't';
+    header.subchunk2_id[3] = 'a';
+    header.subchunk2_size = num_samples * sizeof(float);
+
+    // Write WAV header
+    fwrite(&header, sizeof(WavHeader), 1, wav_file);
+
+    // Write audio data
+    fwrite(data, sizeof(float), num_samples, wav_file);
+
+    // Close the file
+    fclose(wav_file);
+
+    printf("WAV file '%s' has been successfully written.\n", filename);
+}

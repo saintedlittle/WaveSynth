@@ -3,6 +3,8 @@
 #include "waves/waves.h"
 #include "utils/utils.h"
 
+#include "melody/purer_melody.h"
+
 void initialize_srand();
 
 void create_perlins();
@@ -10,31 +12,33 @@ void create_waves();
 void create_math();
 void create_noise();
 
-//int main() {
-//    initialize_srand();
-//
-//    omp_set_num_threads(omp_get_max_threads());
-//
-//    setup_information();
-//    setup_bessel_and_log((int)d_random(1.0, 10.0), (float) d_random(1.1, 10.0));
-//
-//    create_waves();
-//    create_math();
-//    create_noise();
-//
-//    setup_noise_information();
-//
-//    create_perlins();
-//    create_fbm_3d(noise_information.fbm_amp, noise_information.fbm_freq, noise_information.fbm_layers, noise_information.fbm_lacunarity);
-//
-//    write_bmp("image.bmp", "image.wav");
-//
-//    print_calculated_golden_ratio();
-//
-//    generate_melody("golder_ratio_melody.wav", MELODY_DURATION);
-//
-//    return EXIT_SUCCESS;
-//}
+int main() {
+    initialize_srand();
+
+    omp_set_num_threads(omp_get_max_threads());
+
+    setup_information();
+    setup_bessel_and_log((int)d_random(1.0, 10.0), (float) d_random(1.1, 10.0));
+
+    create_waves();
+    create_math();
+    create_noise();
+
+    setup_noise_information();
+
+    create_perlins();
+    create_fbm_3d(noise_information.fbm_amp, noise_information.fbm_freq, noise_information.fbm_layers, noise_information.fbm_lacunarity);
+
+    write_bmp("image.bmp", "image.wav");
+
+    print_calculated_golden_ratio();
+
+    generate_melody("golder_ratio_melody.wav", RATIO_DURATION);
+
+    generate_purer_melody(10);
+
+    return EXIT_SUCCESS;
+}
 
 void initialize_srand() {
     srand((unsigned int)time(0));
