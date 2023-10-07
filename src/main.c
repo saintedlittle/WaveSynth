@@ -15,9 +15,12 @@ void create_noise();
 int main() {
     initialize_srand();
 
-    omp_set_num_threads(omp_get_max_threads());
+    #ifdef LINUX
+        omp_set_num_threads(omp_get_max_threads());
+    #endif
 
     setup_information();
+
     setup_bessel_and_log((int)d_random(1.0, 10.0), (float) d_random(1.1, 10.0));
 
     create_waves();
@@ -29,7 +32,7 @@ int main() {
     create_perlins();
     create_fbm_3d(noise_information.fbm_amp, noise_information.fbm_freq, noise_information.fbm_layers, noise_information.fbm_lacunarity);
 
-    write_bmp("image.bmp", "image.wav");
+    // write_bmp("image.bmp", "image.wav");
 
     print_calculated_golden_ratio();
 

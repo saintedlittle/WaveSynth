@@ -8,7 +8,10 @@
 // FOR MATH
 
 #ifdef WIN32
+#ifdef MSVC
 #include <corecrt_math.h>
+#endif
+
 #include "math/functions.h"
 
 #define M_PI acos(-1.0)

@@ -12,4 +12,8 @@ if(MSVC)
     target_compile_options(wavGenerator PRIVATE /wd4244)
 else()
     target_link_libraries(wavGenerator PRIVATE m)
+
+    if(MINGW)
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
+    endif()
 endif()
