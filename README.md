@@ -50,7 +50,7 @@ We welcome contributions to the WaveSynth project. Feel free to submit pull requ
 
 ## License
 
-WaveSynth is open-source software released under the [MIT License](LICENSE).
+WaveSynth is open-source software released under the [MIT License](https://github.com/saintedlittle/wav-funning/blob/main/LICENSE).
 
 ## Acknowledgments
 
@@ -58,6 +58,6 @@ We would like to thank the open-source community for their contributions to the 
 
 ## Contact
 
-For questions or feedback, please contact [Your Name] at [Your Email Address].
+For questions or feedback, please contact saintedlittle at fetik228zxc@gmail.com.
 
 Enjoy exploring the creative possibilities of WaveSynth!
