@@ -1,4 +1,4 @@
-Title: "WaveSynth - A Sound and Image Generation Project"
+# WaveSynth - A Sound and Image Generation Project
 
 ## Overview
 
